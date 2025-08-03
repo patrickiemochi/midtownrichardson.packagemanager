@@ -352,10 +352,10 @@
         </div>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="window.showTab('dashboard')">📊 總覽</button>
-            <button class="nav-tab" onclick="window.showTab('add')">➕ 新增</button>
-            <button class="nav-tab" onclick="window.showTab('list')">📋 清單</button>
-            <button class="nav-tab" onclick="window.showTab('scan')">📱 掃碼</button>
+            <button class="nav-tab active" data-tab="dashboard" onclick="showTab('dashboard')">📊 總覽</button>
+            <button class="nav-tab" data-tab="add" onclick="showTab('add')">➕ 新增</button>
+            <button class="nav-tab" data-tab="list" onclick="showTab('list')">📋 清單</button>
+            <button class="nav-tab" data-tab="scan" onclick="showTab('scan')">📱 掃碼</button>
         </div>
         
         <!-- 總覽頁面 -->
@@ -404,7 +404,7 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">類型</label>
-                    <select class="form-input" id="itemType" onchange="window.updateFormFields()">
+                    <select class="form-input" id="itemType" onchange="updateFormFields()">
                         <option value="快遞包裹">📦 快遞包裹</option>
                         <option value="寄存轉交">📋 寄存轉交</option>
                         <option value="代付款項">💰 代付款項</option>
@@ -447,7 +447,7 @@
                 </div>
             </div>
             
-            <button class="btn btn-primary" onclick="window.addItem()">
+            <button class="btn btn-primary" onclick="addItem()">
                 ➕ 新增項目
             </button>
             
@@ -457,14 +457,14 @@
         <!-- 清單頁面 -->
         <div class="tab-content" id="list">
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜尋代號、姓名、房號、追蹤號碼..." onkeyup="window.searchItems()">
-                <select class="form-input" id="filterType" onchange="window.searchItems()" style="flex: none; width: 150px;">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜尋代號、姓名、房號、追蹤號碼..." onkeyup="searchItems()">
+                <select class="form-input" id="filterType" onchange="searchItems()" style="flex: none; width: 150px;">
                     <option value="">全部類型</option>
                     <option value="快遞包裹">快遞包裹</option>
                     <option value="寄存轉交">寄存轉交</option>
                     <option value="代付款項">代付款項</option>
                 </select>
-                <select class="form-input" id="filterStatus" onchange="window.searchItems()" style="flex: none; width: 120px;">
+                <select class="form-input" id="filterStatus" onchange="searchItems()" style="flex: none; width: 120px;">
                     <option value="">全部狀態</option>
                     <option value="待處理">待處理</option>
                     <option value="已通知">已通知</option>
@@ -505,15 +505,15 @@
             
             <div class="scanner-container">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <button class="btn btn-primary" onclick="window.startScanner()">📷 開啟相機掃描</button>
-                    <button class="btn btn-warning" onclick="window.stopScanner()">⏹️ 停止掃描</button>
+                    <button class="btn btn-primary" onclick="startScanner()">📷 開啟相機掃描</button>
+                    <button class="btn btn-warning" onclick="stopScanner()">⏹️ 停止掃描</button>
                 </div>
                 
                 <div id="scanner" style="margin: 0 auto;"></div>
                 
                 <div style="margin-top: 20px;">
                     <input type="text" class="search-input" id="manualCode" placeholder="或手動輸入代號..." style="width: 100%;">
-                    <button class="btn btn-success" onclick="window.searchByCode()" style="margin-top: 10px; width: 100%;">🔍 查詢</button>
+                    <button class="btn btn-success" onclick="searchByCode()" style="margin-top: 10px; width: 100%;">🔍 查詢</button>
                 </div>
             </div>
             
@@ -529,8 +529,8 @@
             <p><strong>代號：<span id="qrCodeText"></span></strong></p>
             <p>請將此QR碼分享給收件人</p>
             <div style="margin-top: 20px;">
-                <button class="btn btn-primary" onclick="window.downloadQR()">💾 下載QR碼</button>
-                <button class="btn btn-danger" onclick="window.closeQR()">❌ 關閉</button>
+                <button class="btn btn-primary" onclick="downloadQR()">💾 下載QR碼</button>
+                <button class="btn btn-danger" onclick="closeQR()">❌ 關閉</button>
             </div>
         </div>
     </div>
@@ -954,9 +954,9 @@
                             ${item.remarks ? `<p><strong>備註：</strong>${item.remarks}</p>` : ''}
                         </div>
                         <div style="margin-top: 15px;">
-                            <button class="btn btn-success" onclick="updateStatus('${item.code}', '已取件')">✅ 標記已取件</button>
-                            <button class="btn btn-warning" onclick="updateStatus('${item.code}', '已通知')">📞 標記已通知</button>
-                            <button class="btn btn-primary" onclick="showQR('${item.code}')">📱 顯示QR碼</button>
+                            <button class="btn btn-success" onclick="window.updateStatus('${item.code}', '已取件')">✅ 標記已取件</button>
+                            <button class="btn btn-warning" onclick="window.updateStatus('${item.code}', '已通知')">📞 標記已通知</button>
+                            <button class="btn btn-primary" onclick="window.showQR('${item.code}')">📱 顯示QR碼</button>
                         </div>
                     </div>
                 `;
@@ -1122,4 +1122,4 @@
         });
 
         // 初始化表單欄位
-        updateFormFields();    
+        updateFormFields();

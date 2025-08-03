@@ -352,10 +352,10 @@
         </div>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('dashboard')">📊 總覽</button>
-            <button class="nav-tab" onclick="showTab('add')">➕ 新增</button>
-            <button class="nav-tab" onclick="showTab('list')">📋 清單</button>
-            <button class="nav-tab" onclick="showTab('scan')">📱 掃碼</button>
+            <button class="nav-tab active" onclick="window.showTab('dashboard')">📊 總覽</button>
+            <button class="nav-tab" onclick="window.showTab('add')">➕ 新增</button>
+            <button class="nav-tab" onclick="window.showTab('list')">📋 清單</button>
+            <button class="nav-tab" onclick="window.showTab('scan')">📱 掃碼</button>
         </div>
         
         <!-- 總覽頁面 -->
@@ -404,7 +404,7 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">類型</label>
-                    <select class="form-input" id="itemType" onchange="updateFormFields()">
+                    <select class="form-input" id="itemType" onchange="window.updateFormFields()">
                         <option value="快遞包裹">📦 快遞包裹</option>
                         <option value="寄存轉交">📋 寄存轉交</option>
                         <option value="代付款項">💰 代付款項</option>
@@ -447,7 +447,7 @@
                 </div>
             </div>
             
-            <button class="btn btn-primary" onclick="addItem()">
+            <button class="btn btn-primary" onclick="window.addItem()">
                 ➕ 新增項目
             </button>
             
@@ -457,14 +457,14 @@
         <!-- 清單頁面 -->
         <div class="tab-content" id="list">
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜尋代號、姓名、房號、追蹤號碼..." onkeyup="searchItems()">
-                <select class="form-input" id="filterType" onchange="searchItems()" style="flex: none; width: 150px;">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜尋代號、姓名、房號、追蹤號碼..." onkeyup="window.searchItems()">
+                <select class="form-input" id="filterType" onchange="window.searchItems()" style="flex: none; width: 150px;">
                     <option value="">全部類型</option>
                     <option value="快遞包裹">快遞包裹</option>
                     <option value="寄存轉交">寄存轉交</option>
                     <option value="代付款項">代付款項</option>
                 </select>
-                <select class="form-input" id="filterStatus" onchange="searchItems()" style="flex: none; width: 120px;">
+                <select class="form-input" id="filterStatus" onchange="window.searchItems()" style="flex: none; width: 120px;">
                     <option value="">全部狀態</option>
                     <option value="待處理">待處理</option>
                     <option value="已通知">已通知</option>
@@ -505,15 +505,15 @@
             
             <div class="scanner-container">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <button class="btn btn-primary" onclick="startScanner()">📷 開啟相機掃描</button>
-                    <button class="btn btn-warning" onclick="stopScanner()">⏹️ 停止掃描</button>
+                    <button class="btn btn-primary" onclick="window.startScanner()">📷 開啟相機掃描</button>
+                    <button class="btn btn-warning" onclick="window.stopScanner()">⏹️ 停止掃描</button>
                 </div>
                 
                 <div id="scanner" style="margin: 0 auto;"></div>
                 
                 <div style="margin-top: 20px;">
                     <input type="text" class="search-input" id="manualCode" placeholder="或手動輸入代號..." style="width: 100%;">
-                    <button class="btn btn-success" onclick="searchByCode()" style="margin-top: 10px; width: 100%;">🔍 查詢</button>
+                    <button class="btn btn-success" onclick="window.searchByCode()" style="margin-top: 10px; width: 100%;">🔍 查詢</button>
                 </div>
             </div>
             
@@ -529,15 +529,14 @@
             <p><strong>代號：<span id="qrCodeText"></span></strong></p>
             <p>請將此QR碼分享給收件人</p>
             <div style="margin-top: 20px;">
-                <button class="btn btn-primary" onclick="downloadQR()">💾 下載QR碼</button>
-                <button class="btn btn-danger" onclick="closeQR()">❌ 關閉</button>
+                <button class="btn btn-primary" onclick="window.downloadQR()">💾 下載QR碼</button>
+                <button class="btn btn-danger" onclick="window.closeQR()">❌ 關閉</button>
             </div>
         </div>
     </div>
 
-    <!-- 引入所需的庫 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <!-- QR碼生成庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
     <script>
         // 全域變數
@@ -550,8 +549,26 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('系統初始化中...');
+            
+            // 確保所有函數都已定義
+            window.showTab = showTab;
+            window.addItem = addItem;
+            window.searchItems = searchItems;
+            window.updateFormFields = updateFormFields;
+            window.showQR = showQR;
+            window.closeQR = closeQR;
+            window.downloadQR = downloadQR;
+            window.startScanner = startScanner;
+            window.stopScanner = stopScanner;
+            window.searchByCode = searchByCode;
+            window.updateStatus = updateStatus;
+            
+            // 載入資料
             loadData();
             setInterval(loadData, 30000); // 每30秒自動重新載入
+            
+            console.log('系統初始化完成');
         });
 
         // 載入資料
@@ -559,25 +576,28 @@
             try {
                 const response = await fetch(SHEET_URL);
                 const text = await response.text();
-                const json = JSON.parse(text.substr(47).slice(0, -2));
+                
+                // 移除 Google 包裝的前後綴
+                const jsonText = text.substring(47, text.length - 2);
+                const json = JSON.parse(jsonText);
                 
                 allData = [];
-                if (json.table && json.table.rows) {
-                    json.table.rows.forEach(row => {
-                        if (row.c && row.c[0] && row.c[0].v) {
+                if (json && json.table && json.table.rows) {
+                    json.table.rows.forEach((row, index) => {
+                        if (row.c && row.c[0] && row.c[0].v && index > 0) { // 跳過標題行
                             allData.push({
-                                datetime: row.c[0] ? row.c[0].v : '',
-                                type: row.c[1] ? row.c[1].v : '',
-                                code: row.c[2] ? row.c[2].v : '',
-                                recipient: row.c[3] ? row.c[3].v : '',
-                                room: row.c[4] ? row.c[4].v : '',
-                                sender: row.c[5] ? row.c[5].v : '',
-                                description: row.c[6] ? row.c[6].v : '',
-                                amount: row.c[7] ? row.c[7].v : '',
-                                status: row.c[8] ? row.c[8].v : '',
-                                staff: row.c[9] ? row.c[9].v : '',
-                                remarks: row.c[10] ? row.c[10].v : '',
-                                completedTime: row.c[11] ? row.c[11].v : ''
+                                datetime: row.c[0] ? (row.c[0].v || '') : '',
+                                type: row.c[1] ? (row.c[1].v || '') : '',
+                                code: row.c[2] ? (row.c[2].v || '') : '',
+                                recipient: row.c[3] ? (row.c[3].v || '') : '',
+                                room: row.c[4] ? (row.c[4].v || '') : '',
+                                sender: row.c[5] ? (row.c[5].v || '') : '',
+                                description: row.c[6] ? (row.c[6].v || '') : '',
+                                amount: row.c[7] ? (row.c[7].v || '') : '',
+                                status: row.c[8] ? (row.c[8].v || '') : '',
+                                staff: row.c[9] ? (row.c[9].v || '') : '',
+                                remarks: row.c[10] ? (row.c[10].v || '') : '',
+                                completedTime: row.c[11] ? (row.c[11].v || '') : ''
                             });
                         }
                     });
@@ -588,7 +608,27 @@
                 
             } catch (error) {
                 console.error('載入資料失敗:', error);
-                showMessage('載入資料失敗，請檢查網路連線', 'error');
+                showMessage('載入資料失敗，請檢查網路連線或稍後再試', 'error');
+                
+                // 顯示示範資料
+                allData = [
+                    {
+                        datetime: '2024-12-19 10:30:00',
+                        type: '快遞包裹',
+                        code: 'EX24121901',
+                        recipient: '張小明',
+                        room: '301',
+                        sender: '順豐快遞',
+                        description: 'SF1234567890',
+                        amount: '',
+                        status: '待處理',
+                        staff: '櫃台人員',
+                        remarks: '',
+                        completedTime: ''
+                    }
+                ];
+                updateDashboard();
+                displayItems(allData);
             }
         }
 
@@ -651,8 +691,8 @@
                     <td>${item.staff}</td>
                     <td>${formatDateTime(item.datetime)}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" onclick="showQR('${item.code}')">QR碼</button>
-                        <select onchange="updateStatus('${item.code}', this.value)" class="btn btn-sm">
+                        <button class="btn btn-sm btn-primary" onclick="window.showQR('${item.code}')">QR碼</button>
+                        <select onchange="window.updateStatus('${item.code}', this.value)" class="btn btn-sm">
                             <option value="">更新狀態</option>
                             <option value="待處理">待處理</option>
                             <option value="已通知">已通知</option>
@@ -783,14 +823,26 @@
             const container = document.getElementById('qrCodeContainer');
             container.innerHTML = '';
             
-            // 生成新的QR碼
-            QRCode.toCanvas(container, code, {
-                width: 200,
-                height: 200,
-                margin: 2
-            }, function (error) {
-                if (error) console.error(error);
-            });
+            // 使用qrcode-generator生成QR碼
+            try {
+                const qr = qrcode(0, 'M');
+                qr.addData(code);
+                qr.make();
+                
+                // 創建QR碼圖片
+                const qrDiv = document.createElement('div');
+                qrDiv.innerHTML = qr.createImgTag(4, 8);
+                qrDiv.style.textAlign = 'center';
+                container.appendChild(qrDiv);
+                
+            } catch (error) {
+                // 如果QR碼庫失敗，顯示文字版本
+                container.innerHTML = `
+                    <div style="border: 2px solid #333; padding: 20px; font-family: monospace; font-size: 18px; text-align: center;">
+                        ${code}
+                    </div>
+                `;
+            }
             
             document.getElementById('qrModal').style.display = 'flex';
         }
@@ -802,18 +854,22 @@
 
         // 下載QR碼
         function downloadQR() {
-            const canvas = document.querySelector('#qrCodeContainer canvas');
             const code = document.getElementById('qrCodeText').textContent;
+            const img = document.querySelector('#qrCodeContainer img');
             
-            if (canvas) {
+            if (img) {
+                // 如果有QR碼圖片，創建下載連結
                 const link = document.createElement('a');
                 link.download = `QR_${code}.png`;
-                link.href = canvas.toDataURL();
+                link.href = img.src;
                 link.click();
+            } else {
+                // 如果沒有圖片，提示用戶截圖
+                alert(`請截圖保存QR碼\n代號：${code}`);
             }
         }
 
-        // 開始掃描
+        // 開始掃描（簡化版本）
         function startScanner() {
             if (isScanning) return;
             
@@ -840,16 +896,10 @@
                     scanner.innerHTML = '';
                     scanner.appendChild(video);
                     
-                    // 簡單的掃描檢測（每秒檢查一次）
-                    const scanInterval = setInterval(function() {
-                        if (!isScanning) {
-                            clearInterval(scanInterval);
-                            return;
-                        }
-                        
-                        // 這裡可以加入更複雜的條碼識別邏輯
-                        // 目前先提供手動輸入的方式
-                    }, 1000);
+                    // 顯示使用提示
+                    const tip = document.createElement('div');
+                    tip.innerHTML = '<p style="margin-top: 10px; font-size: 12px; color: #666;">📱 請將QR碼對準相機，然後在下方手動輸入代號</p>';
+                    scanner.appendChild(tip);
                     
                 })
                 .catch(function(error) {
@@ -967,7 +1017,12 @@
             
             // 顯示選中的標籤內容
             document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+            
+            // 找到對應的按鈕並設為 active
+            const activeButton = Array.from(buttons).find(btn => btn.onclick.toString().includes(tabName));
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
             
             // 停止掃描如果離開掃描頁面
             if (tabName !== 'scan') {
@@ -1067,4 +1122,4 @@
         });
 
         // 初始化表單欄位
-        updateFormFields();
+        updateFormFields();    

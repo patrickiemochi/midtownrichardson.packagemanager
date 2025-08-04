@@ -347,8 +347,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏨 飯店包裹管理系統</h1>
-            <p>智能化包裹寄存與管理解決方案</p>
+            <h1> MIDTOWN RICHARDSON PACKAGE MANAGER</h1>
+            <p>帶著你要的愛我來囉</p>
         </div>
         
         <div class="nav-tabs">
@@ -547,22 +547,22 @@
         let allData = [];
         let isScanning = false;
 
+        // 全域函數聲明（確保在全域作用域）
+        window.showTab = showTab;
+        window.addItem = addItem;
+        window.searchItems = searchItems;
+        window.updateFormFields = updateFormFields;
+        window.showQR = showQR;
+        window.closeQR = closeQR;
+        window.downloadQR = downloadQR;
+        window.startScanner = startScanner;
+        window.stopScanner = stopScanner;
+        window.searchByCode = searchByCode;
+        window.updateStatus = updateStatus;
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             console.log('系統初始化中...');
-            
-            // 確保所有函數都已定義
-            window.showTab = showTab;
-            window.addItem = addItem;
-            window.searchItems = searchItems;
-            window.updateFormFields = updateFormFields;
-            window.showQR = showQR;
-            window.closeQR = closeQR;
-            window.downloadQR = downloadQR;
-            window.startScanner = startScanner;
-            window.stopScanner = stopScanner;
-            window.searchByCode = searchByCode;
-            window.updateStatus = updateStatus;
             
             // 載入資料
             loadData();
@@ -691,8 +691,8 @@
                     <td>${item.staff}</td>
                     <td>${formatDateTime(item.datetime)}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" onclick="window.showQR('${item.code}')">QR碼</button>
-                        <select onchange="window.updateStatus('${item.code}', this.value)" class="btn btn-sm">
+                        <button class="btn btn-sm btn-primary" onclick="showQR('${item.code}')">QR碼</button>
+                        <select onchange="updateStatus('${item.code}', this.value)" class="btn btn-sm">
                             <option value="">更新狀態</option>
                             <option value="待處理">待處理</option>
                             <option value="已通知">已通知</option>
@@ -954,9 +954,9 @@
                             ${item.remarks ? `<p><strong>備註：</strong>${item.remarks}</p>` : ''}
                         </div>
                         <div style="margin-top: 15px;">
-                            <button class="btn btn-success" onclick="window.updateStatus('${item.code}', '已取件')">✅ 標記已取件</button>
-                            <button class="btn btn-warning" onclick="window.updateStatus('${item.code}', '已通知')">📞 標記已通知</button>
-                            <button class="btn btn-primary" onclick="window.showQR('${item.code}')">📱 顯示QR碼</button>
+                            <button class="btn btn-success" onclick="updateStatus('${item.code}', '已取件')">✅ 標記已取件</button>
+                            <button class="btn btn-warning" onclick="updateStatus('${item.code}', '已通知')">📞 標記已通知</button>
+                            <button class="btn btn-primary" onclick="showQR('${item.code}')">📱 顯示QR碼</button>
                         </div>
                     </div>
                 `;
@@ -1123,3 +1123,4 @@
 
         // 初始化表單欄位
         updateFormFields();
+    </script>
